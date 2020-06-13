@@ -4,7 +4,25 @@
 21. éjfél valami mködő
 
 1.modul: felismerés
+Egy olyan np-t hozzon létre, ahol maga ceruza pl fehér, minden más fekete.
+
+
 
 2. modul: kooridánta kimentése
+Fehér paca koordinátáinak meghatározása, átlagolással. 
+Kordinátát ad vissza.
 
 3. modul: megjelenítés
+
+Np létrehozása és plottolása.
+
+
+3.a: színválasztás gombokkal,
+3.b: radír/ceruza váltó
+3.c: vastagság állító (3 méret)
+
+4. modul kimentés
+A kész Np kimentése.
+
+
+Numpy
