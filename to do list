@@ -3,16 +3,17 @@
 
 21. éjfél valami mködő
 
-1.modul: felismerés
+1.modul: felismerés: Deee 
 Egy olyan np-t hozzon létre, ahol maga ceruza pl fehér, minden más fekete.
 
+Kamera kép be, np ki.
 
 
-2. modul: kooridánta kimentése
+2. modul: kooridánta kimentése : Zsolti
 Fehér paca koordinátáinak meghatározása, átlagolással. 
-Kordinátát ad vissza.
+Np be, koord ki.
 
-3. modul: megjelenítés
+3. modul: megjelenítés: Dani, Máté, plusz aki végez
 
 Np létrehozása és plottolása.
 
@@ -21,7 +22,9 @@ Np létrehozása és plottolása.
 3.b: radír/ceruza váltó
 3.c: vastagság állító (3 méret)
 
-4. modul kimentés
+np, gomb be, np ki.
+
+4. modul kimentés :Akinek először lesz 5 perce
 A kész Np kimentése.
 
 
