@@ -1,1 +1,52 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import cv2
 
+
+kep=np.zeros((720,1280)).astype(np.float64)
+x=230
+y=600
+radius=30
+color=0.9921875
+
+
+		
+		
+while(True):
+ 
+	for i in range (x-radius, x+radius, 1)
+		for j in range (y-radius,y+radius,1)
+			kep [i,j]=color
+			
+	 cv2.imshow('MagicPaint2k20',kep)
+ 
+ #Kezelő gombok irányítása : szín, méret. A radír gyakorlatilag csak fehér szín
+	 if cv2.waitKey(1) & 0xFF == ord('q'):
+	 	break
+	 	
+	if cv2.waitKey(1) & 0xFF == ord('a'):
+		radius=10
+		
+	if cv2.waitKey(1) & 0xFF == ord('b'):
+		radius=20
+		
+	if cv2.waitKey(1) & 0xFF == ord('c'):
+		radius=30
+		
+	if cv2.waitKey(1) & 0xFF == ord('e'):
+		color=0.5
+		
+	if cv2.waitKey(1) & 0xFF == ord('f'):
+		color=0.8
+		
+	if cv2.waitKey(1) & 0xFF == ord('g'):
+		color=0.9
+
+	if cv2.waitKey(1) & 0xFF == ord('h'):
+		color=0
+
+
+
+
+
+cv2.destroyAllWindows()
