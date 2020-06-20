@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import cv2
 
 
+
 kep=np.zeros((720,1280)).astype(np.float64)
 x=230
 y=600
@@ -19,7 +20,7 @@ while(True):
             if ((i-x)**2+(j-y)**2<(radius*radius)):
                 kep [i,j]=color
 
-    cv2.imshow('MagicPaint2k20',kep)
+    cv2.imshow('MagicPaint2k20',kep.astype(np.float))
  
  #Kezelő gombok irányítása : szín, méret. A radír gyakorlatilag csak fehér szín
     if cv2.waitKey(1) & 0xFF == ord('q'):
