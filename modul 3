@@ -6,7 +6,7 @@ import cv2
 kep=np.zeros((720,1280)).astype(np.float64)
 x=230
 y=600
-radius=30
+radius=10
 color=0.9921875
 
 
@@ -16,7 +16,8 @@ while(True):
     
     for i in range (x-radius, x+radius, 1):
         for j in range (y-radius,y+radius,1):
-            kep [i,j]=color
+            if ((i-x)**2+(j-y)**2<(radius*radius)):
+                kep [i,j]=color
 
     cv2.imshow('MagicPaint2k20',kep)
  
