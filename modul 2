@@ -1,1 +1,21 @@
-
+#koordináták megtalálása:
+import numpy as np
+def koordinatamegtalal(kep):
+    #ketto feltel ha kell:
+    egyik=0
+    masik=0
+    osszes=0
+    x=0
+    y=0
+    for i in range(0,len(kep)):
+        for j in range(0, len(kep[i])):
+            #feltételek majd az egyikebe meg beirogatunk attol fuggoen h milyen np fog kijonni a kepfelismeresbol:
+            if(kep[i,j]==1):
+            #if(kep[i,j]>egyik and kep[i,j]<masik):
+                x+=j
+                y+=i
+                osszes+=1
+    x=round(x/osszes)
+    y=round(y/osszes)
+    koord=np.array([x,y])
+    return koord
