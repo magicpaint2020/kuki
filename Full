@@ -28,9 +28,9 @@ cap = cv2.VideoCapture(0)
 
 
 
-kep=np.zeros((720,1280)).astype(np.float64)
+kep=np.zeros((480,640)).astype(np.float64)
 radius=10
-color=0.9921875
+color=1
 
 
 while(True):
@@ -48,7 +48,7 @@ while(True):
     frameSelected = cv2.bitwise_and(frame, frame, mask=mask)
    # cv2.imshow('frame',mask)
     #xcv2.imshow('orig', frame)
-    #cv2.imshow('eroded', maskEroded)
+    cv2.imshow('eroded', maskEroded)
     
     
     x=koordinatamegtalal(maskEroded)[0]
