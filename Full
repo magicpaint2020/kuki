@@ -1,3 +1,15 @@
+import numpy as np
+import cv2
+
+cap = cv2.VideoCapture(0)
+draw = 0
+x1, y1 = 0,0
+canvas = None
+
+while(True):
+    ret, frame = cap.read()
+    imgHSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    
     if canvas is None:
         canvas = np.zeros_like(frame)
     
