@@ -1,97 +1,46 @@
-
-import numpy as np
-import matplotlib.pyplot as plt
-import cv2
-
-#koordináták megtalálása:
-def koordinatamegtalal(kep):
-    #ketto feltel ha kell:
-    egyik=0
-    masik=0
-    osszes=1
-    x=0
-    y=0
-    for i in range(0,len(kep)):
-        for j in range(0, len(kep[i])):
-            #feltételek majd az egyikebe meg beirogatunk attol fuggoen h milyen np fog kijonni a kepfelismeresbol:
-            if(kep[i,j]>=0.6):
-            #if(kep[i,j]>egyik and kep[i,j]<masik):
-                x+=j
-                y+=i
-                osszes+=1
-    x=round(x/osszes)
-    y=round(y/osszes)
-    koord=np.array([x,y])
-    return koord
-
-cap = cv2.VideoCapture(0)
-
-
-
-kep=np.zeros((480,640)).astype(np.float64)
-radius=10
-color=1
-
-
-while(True):
-    ret, frame = cap.read()
-    imgHSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    if canvas is None:
+        canvas = np.zeros_like(frame)
     
-    lower = np.array([0, 100, 78])
-    upper = np.array([200, 255, 255])
-    
-    mask = cv2.inRange(imgHSV, lower, upper)
+    lower = np.array([35, 30, 30])
+    upper = np.array([85, 255, 255])
+
+    mask = cv2.inRange(imgHSV, lower, upper)    
+    #Maszk erodálása
+    #kernel init
     kernel = np.ones((5,5), np.uint8)
-    maskEroded = cv2.erode(mask, kernel, iterations = 3)
-    maskEroded=maskEroded.astype(np.float64)
-   
-    frameSelected = cv2.bitwise_and(frame, frame, mask=mask)
-   # cv2.imshow('frame',mask)
-    #xcv2.imshow('orig', frame)
-    cv2.imshow('eroded', maskEroded)
+    #erode
+    frameG = cv2.erode(mask, kernel, iterations = 2)
     
+    frameG = cv2.GaussianBlur(frameG, (15,15),0)
     
-    x=koordinatamegtalal(maskEroded)[0]
-    y=koordinatamegtalal(maskEroded)[1]
-    
-    for i in range (x-radius, x+radius, 1):
-        for j in range (y-radius,y+radius,1):
-            if ((i-x)**2+(j-y)**2<(radius*radius)):
-                kep [i,j]=color
+    frameG = cv2.flip(frameG, 1) #tükrözés
+    drawing = cv2.cvtColor(frameG,cv2.COLOR_GRAY2BGR) #csinálunk egy színes képet
 
-    cv2.imshow('MagicPaint2k20',kep.astype(np.float))
-    plt.imshow(kep)
+    contours, hierarchy = cv2.findContours(frameG, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     
     
+    if contours and cv2.contourArea(max(contours, key = cv2.contourArea)) > 300:            
+        c = max(contours, key = cv2.contourArea)    
+        x,y,w,h = cv2.boundingRect(c)
+        x2,y2 = int(x+w/2),int(y+h/2)
+        cv2.rectangle(drawing,(x,y),(x+w,y+h),(0,25,255),2)
     
- #Kezelő gombok irányítása : szín, méret. A radír gyakorlatilag csak fehér szín
+        if(x1 == 0 and y1 == 0):
+            x1,y1= x2,y2
+        else:
+            canvas = cv2.line(canvas, (x1,y1),(x2,y2), [255,0,0], 4)
+        x1,y1 = x2,y2
+    else:
+        x1, y1 = 0,0  
+        
+    drawing = cv2.add(drawing, canvas)
+  
+    cv2.namedWindow("Magic Paint", cv2.WINDOW_NORMAL)#fullscreen vagy ilyesmi
+    #cv2.setWindowProperty("Magic Paint", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN) #fullscreen vagy ilyesmi
+    cv2.imshow('Magic Paint',drawing)
+           
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
-
-    if cv2.waitKey(1) & 0xFF == ord('a'):
-        radius=10
         
-    if cv2.waitKey(1) & 0xFF == ord('b'):
-        radius=20
-
-    if cv2.waitKey(1) & 0xFF == ord('c'):
-        radius=30
-
-    if cv2.waitKey(1) & 0xFF == ord('e'):
-        color=0.5
-        
-    if cv2.waitKey(1) & 0xFF == ord('f'):
-        color=0.8
-        
-    if cv2.waitKey(1) & 0xFF == ord('g'):
-        color=0.9
-
-    if cv2.waitKey(1) & 0xFF == ord('h'):
-        color=0
-
-    
-    
-    
-    
 cap.release()
 cv2.destroyAllWindows()
