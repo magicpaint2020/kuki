@@ -1,0 +1,58 @@
+import numpy as np
+import cv2
+
+cap = cv2.VideoCapture(0)
+draw = 0
+x1, y1 = 0,0
+canvas = None
+
+while(True):
+    ret, frame = cap.read()
+    imgHSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    
+    if canvas is None:
+        canvas = np.zeros_like(frame)
+    
+    lower = np.array([35, 30, 30])
+    upper = np.array([85, 255, 255])
+
+    mask = cv2.inRange(imgHSV, lower, upper)    
+    #Maszk erodálása
+    #kernel init
+    kernel = np.ones((5,5), np.uint8)
+    #erode
+    frameG = cv2.erode(mask, kernel, iterations = 2)
+    
+    frameG = cv2.GaussianBlur(frameG, (15,15),0)
+    
+    frameG = cv2.flip(frameG, 1) #tükrözés
+    drawing = cv2.cvtColor(frameG,cv2.COLOR_GRAY2BGR) #csinálunk egy színes képet
+
+    contours, hierarchy = cv2.findContours(frameG, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    
+    if contours and cv2.contourArea(max(contours, key = cv2.contourArea)) > 300:            
+        c = max(contours, key = cv2.contourArea)    
+        x,y,w,h = cv2.boundingRect(c)
+        x2,y2 = int(x+w/2),int(y+h/2)
+        cv2.rectangle(drawing,(x,y),(x+w,y+h),(0,25,255),2)
+    
+        if(x1 == 0 and y1 == 0):
+            x1,y1= x2,y2
+        else:
+            canvas = cv2.line(canvas, (x1,y1),(x2,y2), [255,0,0], 4)
+        x1,y1 = x2,y2
+    else:
+        x1, y1 = 0,0  
+        
+    drawing = cv2.add(drawing, canvas)
+  
+    cv2.namedWindow("Magic Paint", cv2.WINDOW_NORMAL)#fullscreen vagy ilyesmi
+    #cv2.setWindowProperty("Magic Paint", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN) #fullscreen vagy ilyesmi
+    cv2.imshow('Magic Paint',drawing)
+           
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+        
+cap.release()
+cv2.destroyAllWindows()
